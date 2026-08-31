@@ -1,0 +1,4 @@
+interface:
+  display_name: "Migration Planning"
+  short_description: "Focused developer workflow for migration planning"
+  default_prompt: "Use $migration-planning to complete this developer task."

@@ -1,0 +1,25 @@
+[tools]
+node = "22"
+pnpm = "11.20.0"
+python = "3.12"
+"pipx:pre-commit" = "4.5.1"
+"pipx:yamllint" = "1.37.1"
+typos = "1.40.0"
+lychee = "0.21.0"
+shellcheck = "0.11.0"
+actionlint = "1.7.7"
+
+[settings]
+lockfile = true
+
+[tasks.setup]
+description = "Install repository dependencies and Git hooks"
+run = "./scripts/setup/repository"
+
+[tasks.check]
+description = "Run the complete local CI suite"
+run = "./scripts/ci/check"
+
+[tasks.link-skills]
+description = "Link catalog skills into local agent discovery directories"
+run = "./scripts/dev/link-skills"

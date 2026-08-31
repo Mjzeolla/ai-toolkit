@@ -1,0 +1,7 @@
+interface:
+  display_name: "Ask Me"
+  short_description: "Focused productivity workflow for ask me"
+  default_prompt: "Use $ask-me to complete this productivity task."
+
+policy:
+  allow_implicit_invocation: false

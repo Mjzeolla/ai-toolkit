@@ -1,0 +1,4 @@
+interface:
+  display_name: "Improve Architecture"
+  short_description: "Focused developer workflow for improve architecture"
+  default_prompt: "Use $improve-architecture to complete this developer task."

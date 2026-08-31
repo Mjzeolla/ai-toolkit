@@ -1,0 +1,4 @@
+interface:
+  display_name: "Enforce Structure"
+  short_description: "Focused developer workflow for enforce structure"
+  default_prompt: "Use $enforce-structure to complete this developer task."

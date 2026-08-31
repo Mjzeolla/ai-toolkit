@@ -1,0 +1,7 @@
+interface:
+  display_name: "Autonomous Task Completion"
+  short_description: "Complete bounded tasks without clarification prompts"
+  default_prompt: "Use $task-completion-autonomous to finish this task without asking me questions."
+
+policy:
+  allow_implicit_invocation: false

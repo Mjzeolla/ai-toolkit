@@ -1,0 +1,7 @@
+interface:
+  display_name: "Brief Mode"
+  short_description: "Focused productivity workflow for brief mode"
+  default_prompt: "Use $brief-mode to complete this productivity task."
+
+policy:
+  allow_implicit_invocation: false

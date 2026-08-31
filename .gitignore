@@ -1,0 +1,36 @@
+# Dependencies and generated output
+node_modules/
+dist/
+coverage/
+.cache/
+.lycheecache
+*.tsbuildinfo
+*.tgz
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Tool and editor state
+/.claude/
+/.codex/
+/.cursor/
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+tmp/
+.tmp/

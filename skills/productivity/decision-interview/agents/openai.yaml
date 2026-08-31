@@ -1,0 +1,7 @@
+interface:
+  display_name: "Decision Interview"
+  short_description: "Focused productivity workflow for decision interview"
+  default_prompt: "Use $decision-interview to complete this productivity task."
+
+policy:
+  allow_implicit_invocation: false

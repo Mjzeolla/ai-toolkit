@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Audit"
+  short_description: "Focused developer workflow for security audit"
+  default_prompt: "Use $security-audit to complete this developer task."

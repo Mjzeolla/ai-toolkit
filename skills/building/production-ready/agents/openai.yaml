@@ -1,0 +1,4 @@
+interface:
+  display_name: "Production Ready"
+  short_description: "Focused developer workflow for production ready"
+  default_prompt: "Use $production-ready to complete this developer task."

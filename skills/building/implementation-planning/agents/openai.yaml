@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implementation Planning"
+  short_description: "Turn goals into repository-grounded execution plans"
+  default_prompt: "Use $implementation-planning to produce an executable plan for this change."

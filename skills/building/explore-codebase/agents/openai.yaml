@@ -1,0 +1,4 @@
+interface:
+  display_name: "Explore Codebase"
+  short_description: "Focused developer workflow for explore codebase"
+  default_prompt: "Use $explore-codebase to complete this developer task."

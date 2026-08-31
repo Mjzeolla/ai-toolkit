@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repository_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$repository_root"
+
+mise exec -- pnpm check
+./scripts/ci/check-shell
+./scripts/ci/check-typos
+./scripts/ci/check-links
+
+mise exec -- actionlint
+mise exec -- yamllint .
+
+echo "All local CI checks passed."

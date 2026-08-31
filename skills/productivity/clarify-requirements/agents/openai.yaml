@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clarify Requirements"
+  short_description: "Resolve consequential ambiguity before implementation"
+  default_prompt: "Use $clarify-requirements to identify and resolve the decisions blocking this request."

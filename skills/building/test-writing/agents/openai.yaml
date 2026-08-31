@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Writing"
+  short_description: "Focused developer workflow for test writing"
+  default_prompt: "Use $test-writing to complete this developer task."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Systematic Debugging"
+  short_description: "Diagnose reproducible failures using evidence"
+  default_prompt: "Use $systematic-debugging to isolate the cause of this failure before proposing a fix."

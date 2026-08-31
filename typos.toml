@@ -1,0 +1,13 @@
+[files]
+extend-exclude = [
+  ".git/",
+  "dist/",
+  "node_modules/",
+  "pnpm-lock.yaml"
+]
+
+[default.extend-words]
+frontmatter = "frontmatter"
+openai = "openai"
+pnpm = "pnpm"
+typecheck = "typecheck"

@@ -1,0 +1,15 @@
+.git
+.github
+.claude
+.codex
+.vscode
+node_modules
+dist
+coverage
+.cache
+.env
+.env.*
+*.log
+*.tgz
+tmp
+.tmp

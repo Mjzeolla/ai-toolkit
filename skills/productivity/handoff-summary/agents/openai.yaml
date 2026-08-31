@@ -1,0 +1,4 @@
+interface:
+  display_name: "Handoff Summary"
+  short_description: "Focused productivity workflow for handoff summary"
+  default_prompt: "Use $handoff-summary to complete this productivity task."

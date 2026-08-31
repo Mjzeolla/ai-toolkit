@@ -1,0 +1,36 @@
+{
+  "name": "MZeolla",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Validated catalog of reusable AI skills and plugins.",
+  "type": "module",
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "pnpm lint && pnpm markdown:check && pnpm format:check && pnpm typecheck && pnpm test && pnpm validate",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint src test",
+    "markdown:check": "markdownlint-cli2",
+    "markdown:fix": "markdownlint-cli2 --fix",
+    "test": "node --import tsx --test test/**/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "validate": "tsx src/validate-catalog.ts"
+  },
+  "dependencies": {
+    "yaml": "2.8.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.2",
+    "@types/node": "24.10.1",
+    "eslint": "9.39.2",
+    "markdownlint-cli2": "0.19.0",
+    "prettier": "3.8.2",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.53.0"
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Meeting To Actions"
+  short_description: "Focused productivity workflow for meeting to actions"
+  default_prompt: "Use $meeting-to-actions to complete this productivity task."

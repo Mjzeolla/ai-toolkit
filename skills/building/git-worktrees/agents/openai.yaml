@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Worktrees"
+  short_description: "Manage isolated concurrent Git workspaces safely"
+  default_prompt: "Use $git-worktrees to create or manage an isolated worktree."

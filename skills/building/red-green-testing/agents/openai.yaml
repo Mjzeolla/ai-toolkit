@@ -1,0 +1,4 @@
+interface:
+  display_name: "Red Green Testing"
+  short_description: "Focused developer workflow for red green testing"
+  default_prompt: "Use $red-green-testing to complete this developer task."

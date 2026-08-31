@@ -1,0 +1,4 @@
+interface:
+  display_name: "Performance Analysis"
+  short_description: "Focused developer workflow for performance analysis"
+  default_prompt: "Use $performance-analysis to complete this developer task."

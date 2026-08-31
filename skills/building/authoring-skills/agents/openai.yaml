@@ -1,0 +1,4 @@
+interface:
+  display_name: "Authoring Skills"
+  short_description: "Focused developer workflow for authoring skills"
+  default_prompt: "Use $authoring-skills to complete this developer task."

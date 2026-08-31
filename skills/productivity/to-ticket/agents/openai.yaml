@@ -1,0 +1,4 @@
+interface:
+  display_name: "To Ticket"
+  short_description: "Focused productivity workflow for to ticket"
+  default_prompt: "Use $to-ticket to complete this productivity task."

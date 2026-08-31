@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data Model"
+  short_description: "Focused developer workflow for data model"
+  default_prompt: "Use $data-model to complete this developer task."

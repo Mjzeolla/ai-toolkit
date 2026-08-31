@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dependency Upgrade"
+  short_description: "Focused developer workflow for dependency upgrade"
+  default_prompt: "Use $dependency-upgrade to complete this developer task."

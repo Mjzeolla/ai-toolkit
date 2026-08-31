@@ -1,0 +1,7 @@
+interface:
+  display_name: "Subagent Coordination"
+  short_description: "Focused developer workflow for subagent coordination"
+  default_prompt: "Use $subagent-coordination to complete this developer task."
+
+policy:
+  allow_implicit_invocation: false

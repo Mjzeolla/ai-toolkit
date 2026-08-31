@@ -1,0 +1,4 @@
+interface:
+  display_name: "Change Review"
+  short_description: "Review changes for correctness, risk, and coverage"
+  default_prompt: "Use $change-review to review this change and report actionable findings."

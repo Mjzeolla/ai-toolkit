@@ -1,0 +1,7 @@
+interface:
+  display_name: "Task Completion"
+  short_description: "Focused developer workflow for task completion"
+  default_prompt: "Use $task-completion to complete this developer task."
+
+policy:
+  allow_implicit_invocation: false
