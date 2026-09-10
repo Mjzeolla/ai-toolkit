@@ -3,12 +3,22 @@ import { join, sep } from "node:path";
 
 import { parseFrontmatter } from "./frontmatter.js";
 import { validateLocalLinks } from "./links.js";
-import { validateOpenAiMetadata } from "./metadata.js";
+import { validateOpenAiMetadata } from "./openai-metadata.js";
 import {
   containsPlaceholder,
   skillNamePattern,
   skillReferencePattern,
-} from "./patterns.js";
+} from "../../shared/constants/patterns.js";
+import { listFilesRecursively } from "../../shared/utils/filesystem.js";
+
+function listInstructionFiles(skillDirectory: string): string[] {
+  const skillFile = join(skillDirectory, "SKILL.md");
+  const referenceFiles = listFilesRecursively(
+    join(skillDirectory, "references"),
+  ).filter((file) => file.endsWith(".md"));
+
+  return [skillFile, ...referenceFiles];
+}
 
 export function validateSkill(
   skillDirectory: string,
@@ -64,6 +74,15 @@ export function validateSkill(
 
   validateLocalLinks(content, skillFile, repositoryRoot, errors);
 
+  for (const referenceFile of listInstructionFiles(skillDirectory).slice(1)) {
+    validateLocalLinks(
+      readFileSync(referenceFile, "utf8"),
+      referenceFile,
+      repositoryRoot,
+      errors,
+    );
+  }
+
   const metadataFile = join(skillDirectory, "agents", "openai.yaml");
   if (existsSync(metadataFile)) {
     validateOpenAiMetadata(metadataFile, directoryName, errors);
@@ -79,16 +98,17 @@ export function validateSkillReferences(
   );
 
   for (const skillDirectory of skillDirectories) {
-    const skillFile = join(skillDirectory, "SKILL.md");
-    if (!existsSync(skillFile)) continue;
+    for (const instructionFile of listInstructionFiles(skillDirectory)) {
+      if (!existsSync(instructionFile)) continue;
 
-    const content = readFileSync(skillFile, "utf8");
-    for (const match of content.matchAll(skillReferencePattern)) {
-      const referencedSkill = match[1];
-      if (referencedSkill && !knownSkills.has(referencedSkill)) {
-        errors.push(
-          `${skillFile}: references unknown catalog skill $${referencedSkill}`,
-        );
+      const content = readFileSync(instructionFile, "utf8");
+      for (const match of content.matchAll(skillReferencePattern)) {
+        const referencedSkill = match[1];
+        if (referencedSkill && !knownSkills.has(referencedSkill)) {
+          errors.push(
+            `${instructionFile}: references unknown catalog skill $${referencedSkill}`,
+          );
+        }
       }
     }
   }

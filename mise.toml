@@ -19,7 +19,3 @@ run = "./scripts/setup/repository"
 [tasks.check]
 description = "Run the complete local CI suite"
 run = "./scripts/ci/check"
-
-[tasks.link-skills]
-description = "Link catalog skills into local agent discovery directories"
-run = "./scripts/dev/link-skills"

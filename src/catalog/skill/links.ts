@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { dirname, relative, resolve, sep } from "node:path";
 
-import { markdownLinkPattern } from "./patterns.js";
+import { markdownLinkPattern } from "../../shared/constants/patterns.js";
 
 export function validateLocalLinks(
   content: string,

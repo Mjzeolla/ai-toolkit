@@ -1,4 +1,4 @@
-name: Release catalog
+name: Release Agent Plugin
 
 on:
   push:

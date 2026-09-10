@@ -4,8 +4,8 @@ The repository separates portable AI assets from the tooling used to maintain th
 
 ## Skills
 
-Every skill lives at `skills/<category>/<name>/`. Categories are source navigation for
-people and do not become part of runtime identity. `SKILL.md` contains
+Every skill lives at `plugins/<plugin-name>/skills/<name>/`, matching the portable Agent
+Plugins discovery layout within its owning package. `SKILL.md` contains
 the required YAML frontmatter and the instructions loaded when the skill is selected.
 Product-facing metadata may live in `agents/`; deterministic helpers, conditional
 references, and output assets remain colocated with their owning skill.
@@ -37,35 +37,26 @@ Interaction modes and broad coordinators are explicit-only. Focused capabilities
 implicitly discoverable when their routing descriptions match. This prevents a general task
 from silently switching into interview, terse-response, delegation, or no-questions mode.
 
-Agent discovery directories are commonly flat. `scripts/dev/link-skills` therefore links
-each skill leaf into `~/.agents/skills`, `~/.claude/skills`, selected harnesses, or custom
-destinations. It refuses to replace unrelated files or symlinks and removes only links that
-still point into this repository.
-
 ## Plugins
 
-A plugin is a separately installable bundle rooted at `plugins/<name>/`. It includes one or
-more platform manifests, currently `.codex-plugin/plugin.json` and
-`.claude-plugin/plugin.json`. Each manifest name matches the directory and its version uses
-semantic versioning. Skills owned by a plugin remain within that plugin so the package can
-be installed independently.
-
-The repository intentionally does not treat every group of skills as a plugin. Add a
-plugin only when packaging, lifecycle, dependencies, or installation behavior requires
-one.
+Each directory under `plugins/` is a separately installable package. Its root `plugin.json`
+declares the portable Agent Plugins schema, stable identity, and semantic version. Skills
+remain under their plugin root so packages can be installed independently without mutating
+global skill directories. `.agents/plugins/marketplace.json` exposes those packages to
+Codex, while `.claude-plugin/marketplace.json` and each package's
+`.claude-plugin/plugin.json` provide Claude Code discovery metadata.
 
 ## Validation boundary
 
-The TypeScript validator is split by responsibility under `src/catalog/`:
+The TypeScript validator is split by responsibility under `src/`:
 
-- `filesystem.ts` discovers categories, skills, and plugins;
-- `frontmatter.ts` parses skill metadata;
-- `skill.ts` validates skill instructions and cross-skill routing;
-- `metadata.ts` validates optional Codex-facing metadata;
-- `plugin.ts` validates plugin manifests;
-- `links.ts` validates repository-local Markdown targets;
-- `validate.ts` coordinates the complete catalog result;
-- `types.ts` and `patterns.ts` contain shared contracts and primitives.
+- `plugin/validate.ts` validates portable and runtime-specific plugin manifests;
+- `skill/validate.ts` validates skill instructions and cross-skill routing;
+- `skill/frontmatter.ts`, `skill/links.ts`, and `skill/openai-metadata.ts` own the
+  supporting skill-specific parsers and validators;
+- `shared/types/`, `shared/utils/`, and `shared/constants/` sit outside the catalog
+  domain and contain cross-domain contracts, utilities, and immutable definitions;
+- `catalog/validate.ts` coordinates the complete catalog result without owning domain rules.
 
 `src/catalog.ts` remains a small stable public entrypoint. The command-line adapter lives in
 `src/validate-catalog.ts`.
@@ -84,8 +75,10 @@ The validator enforces these repository-owned structural contracts:
 - agreement between folder and frontmatter names;
 - consistent optional OpenAI interface metadata;
 - references only to skills present in the catalog;
-- valid repository-local Markdown links;
-- basic plugin manifest identity and semantic versions.
+- valid repository-local Markdown links in `SKILL.md` and every nested Markdown file under
+  `references/`;
+- the portable Agent Plugins schema and Claude Code compatibility manifest, including
+  identity and semantic version.
 
 The validator does not prescribe exact prose or attempt to prove that a skill makes good
 decisions. Human review remains responsible for routing quality, scope, safety, and whether

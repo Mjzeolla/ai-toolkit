@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "core-skills",
+  "displayName": "Core Skills",
+  "version": "0.1.0",
+  "description": "Reusable engineering and productivity workflows for capable AI coding agents.",
+  "author": {
+    "name": "MZeolla"
+  },
+  "homepage": "https://github.com/Mjzeolla/ai-toolkit",
+  "repository": "https://github.com/Mjzeolla/ai-toolkit",
+  "license": "MIT",
+  "keywords": ["ai-agents", "coding-agents", "skills", "workflows"]
+}

@@ -4,8 +4,8 @@ These instructions apply to the entire repository.
 
 ## Mission
 
-Maintain a portable, reviewable catalog of reusable AI skills and plugin packages. Prefer
-bounded assets with clear activation criteria over large universal instruction sets.
+Maintain a portable, reviewable marketplace of AI coding-agent plugins. Prefer bounded
+assets with clear activation criteria over large universal instruction sets.
 
 ## Before changing an asset
 
@@ -16,12 +16,11 @@ bounded assets with clear activation criteria over large universal instruction s
 
 ## Structure
 
-- Put standalone skills in `skills/<category>/<skill-name>/`.
-- Supported categories are intentional product navigation; do not invent one for a single
-  asset without documenting the taxonomy decision.
+- Put skills in `plugins/<plugin-name>/skills/<skill-name>/` so each plugin owns everything
+  it installs.
 - Keep a skill self-contained. Required instructions must not live in a sibling skill.
-- Put versioned plugins in `plugins/<plugin-name>/` with the manifest required by their
-  target platform.
+- Keep each portable manifest at `plugins/<plugin-name>/plugin.json` and its Claude Code
+  compatibility manifest at `plugins/<plugin-name>/.claude-plugin/plugin.json`.
 - Add deterministic repository tooling under `scripts/ci`, `scripts/dev`, or
   `scripts/setup`, according to who invokes it.
 - Add deterministic TypeScript validation to `src/` and cover it under `test/`.
@@ -47,4 +46,4 @@ executable and pass ShellCheck.
 
 Do not stage, commit, push, tag, publish, install, or overwrite local agent assets unless
 the user explicitly requests that action. Preserve unrelated worktree changes. Update
-`CHANGELOG.md` for user-visible catalog or installation changes.
+`CHANGELOG.md` for user-visible plugin or installation changes.

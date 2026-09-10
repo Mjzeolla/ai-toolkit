@@ -1,0 +1,32 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "core-skills",
+  "version": "0.1.0",
+  "description": "Reusable engineering and productivity workflows for capable AI coding agents.",
+  "author": {
+    "name": "MZeolla",
+    "url": "https://github.com/Mjzeolla"
+  },
+  "homepage": "https://github.com/Mjzeolla/ai-toolkit",
+  "repository": "https://github.com/Mjzeolla/ai-toolkit",
+  "license": "MIT",
+  "keywords": ["ai-agents", "coding-agents", "skills", "workflows"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Core Skills",
+        "shortDescription": "Engineering workflows for capable coding agents",
+        "longDescription": "A focused collection of reusable engineering and productivity skills for planning, implementation, review, testing, research, and delivery.",
+        "developerName": "MZeolla",
+        "category": "Productivity",
+        "capabilities": ["Read", "Write"],
+        "websiteURL": "https://github.com/Mjzeolla/ai-toolkit",
+        "defaultPrompt": [
+          "Explore this codebase and identify the safest change path.",
+          "Turn this engineering goal into an executable plan.",
+          "Review these changes for concrete defects and regressions."
+        ]
+      }
+    }
+  }
+}

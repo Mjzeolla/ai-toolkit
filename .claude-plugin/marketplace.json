@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "mzeolla-ai-toolkit",
+  "description": "Reusable engineering and productivity plugins for AI coding agents.",
+  "owner": {
+    "name": "MZeolla"
+  },
+  "plugins": [
+    {
+      "name": "core-skills",
+      "source": "./plugins/core-skills"
+    }
+  ]
+}

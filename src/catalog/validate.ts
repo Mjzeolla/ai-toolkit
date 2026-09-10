@@ -1,27 +1,24 @@
-import { join, sep } from "node:path";
+import { join } from "node:path";
 
-import { listDirectories, listSkillDirectories } from "./filesystem.js";
-import { skillNamePattern } from "./patterns.js";
-import { validatePlugin } from "./plugin.js";
-import { validateSkill, validateSkillReferences } from "./skill.js";
-import type { ValidationResult } from "./types.js";
+import { validatePlugin } from "./plugin/validate.js";
+import type { ValidationResult } from "../shared/types/catalog.js";
+import {
+  listDirectories,
+  listSkillDirectories,
+} from "../shared/utils/filesystem.js";
+import { validateSkill, validateSkillReferences } from "./skill/validate.js";
 
 export function validateCatalog(repositoryRoot: string): ValidationResult {
   const errors: string[] = [];
-  const skillsRoot = join(repositoryRoot, "skills");
-  const categories = listDirectories(skillsRoot);
-  const skillDirectories = listSkillDirectories(skillsRoot);
   const pluginDirectories = listDirectories(join(repositoryRoot, "plugins"));
+  const skillDirectories = pluginDirectories.flatMap((pluginDirectory) =>
+    listSkillDirectories(join(pluginDirectory, "skills")),
+  );
 
-  if (skillDirectories.length === 0) {
-    errors.push(`${skillsRoot}: catalog must contain at least one skill`);
-  }
-
-  for (const category of categories) {
-    const categoryName = category.split(sep).at(-1) ?? "";
-    if (!skillNamePattern.test(categoryName)) {
-      errors.push(`${category}: category directory must use kebab-case`);
-    }
+  if (pluginDirectories.length === 0) {
+    errors.push(
+      `${join(repositoryRoot, "plugins")}: catalog must contain a plugin`,
+    );
   }
 
   for (const skillDirectory of skillDirectories) {

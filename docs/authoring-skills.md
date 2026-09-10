@@ -6,10 +6,10 @@ Choose a short kebab-case name and write a description that explains both the ca
 and the circumstances that should activate it. The description is discovery metadata, not
 a summary of every instruction.
 
-Choose an existing category and create this minimum structure:
+Create this minimum plugin-native structure:
 
 ```text
-skills/building/example-skill/
+plugins/core-skills/skills/example-skill/
 ├── SKILL.md
 └── agents/openai.yaml
 ```
@@ -80,8 +80,9 @@ make validate
 make check
 ```
 
-The catalog validator also checks that every `$skill-name` reference resolves to an
-installed catalog skill.
+The catalog validator recursively checks Markdown files under `references/`, including
+their local links and every `$skill-name` reference. Each skill reference must resolve to
+an installed catalog skill.
 
 Review realistic requests the skill should and should not handle. Confirm its output is
 useful without unpublished context and that its instructions preserve user authorization.

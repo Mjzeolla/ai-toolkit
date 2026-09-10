@@ -1,0 +1,20 @@
+{
+  "name": "mzeolla-ai-toolkit",
+  "interface": {
+    "displayName": "MZeolla AI Toolkit"
+  },
+  "plugins": [
+    {
+      "name": "core-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/core-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

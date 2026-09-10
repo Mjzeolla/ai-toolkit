@@ -15,6 +15,7 @@ export interface OpenAiMetadata {
 }
 
 export interface PluginManifest {
+  $schema?: unknown;
   name?: unknown;
   version?: unknown;
   description?: unknown;

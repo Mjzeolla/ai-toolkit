@@ -7,7 +7,7 @@ import { test } from "node:test";
 import { validateCatalog } from "../src/catalog.js";
 
 function createSkill(root: string, name: string, description: string): void {
-  const directory = join(root, "skills", "building", name);
+  const directory = join(root, "plugins", "useful-plugin", "skills", name);
   mkdirSync(join(directory, "agents"), { recursive: true });
   writeFileSync(
     join(directory, "SKILL.md"),
@@ -19,26 +19,34 @@ function createSkill(root: string, name: string, description: string): void {
   );
 }
 
-function createPlugin(
-  root: string,
-  name: string,
-  runtime: "claude" | "codex",
-): void {
-  const manifestDirectory = join(root, "plugins", name, `.${runtime}-plugin`);
-  mkdirSync(manifestDirectory, { recursive: true });
+function createPlugin(root: string, name = "useful-plugin"): void {
+  mkdirSync(join(root, "plugins", name), { recursive: true });
   writeFileSync(
-    join(manifestDirectory, "plugin.json"),
+    join(root, "plugins", name, "plugin.json"),
     JSON.stringify({
+      $schema: "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
       name,
       version: "1.0.0",
       description: "A portable test plugin with useful runtime behavior.",
+    }),
+  );
+  mkdirSync(join(root, "plugins", name, ".claude-plugin"), {
+    recursive: true,
+  });
+  writeFileSync(
+    join(root, "plugins", name, ".claude-plugin", "plugin.json"),
+    JSON.stringify({
+      $schema: "https://json.schemastore.org/claude-code-plugin-manifest.json",
+      name,
+      version: "1.0.0",
+      description: "A Claude Code test plugin with useful runtime behavior.",
     }),
   );
 }
 
 void test("accepts a well-formed catalog", () => {
   const root = mkdtempSync(join(tmpdir(), "catalog-valid-"));
-  mkdirSync(join(root, "plugins"));
+  createPlugin(root);
   createSkill(
     root,
     "useful-test",
@@ -50,9 +58,16 @@ void test("accepts a well-formed catalog", () => {
 
 void test("rejects mismatched names and unfinished descriptions", () => {
   const root = mkdtempSync(join(tmpdir(), "catalog-invalid-"));
-  mkdirSync(join(root, "plugins"));
+  createPlugin(root);
   createSkill(root, "useful-test", "TODO replace this description later");
-  const skillFile = join(root, "skills", "building", "useful-test", "SKILL.md");
+  const skillFile = join(
+    root,
+    "plugins",
+    "useful-plugin",
+    "skills",
+    "useful-test",
+    "SKILL.md",
+  );
   const content = readFile(skillFile).replace(
     "name: useful-test",
     "name: wrong-name",
@@ -69,13 +84,20 @@ void test("rejects mismatched names and unfinished descriptions", () => {
 
 void test("rejects references to skills outside the catalog", () => {
   const root = mkdtempSync(join(tmpdir(), "catalog-reference-"));
-  mkdirSync(join(root, "plugins"));
+  createPlugin(root);
   createSkill(
     root,
     "useful-test",
     "Perform a useful test when repository behavior needs validation.",
   );
-  const skillFile = join(root, "skills", "building", "useful-test", "SKILL.md");
+  const skillFile = join(
+    root,
+    "plugins",
+    "useful-plugin",
+    "skills",
+    "useful-test",
+    "SKILL.md",
+  );
   writeFileSync(
     skillFile,
     `${readFile(skillFile)}\nUse $missing-skill when the missing workflow applies.\n`,
@@ -87,43 +109,137 @@ void test("rejects references to skills outside the catalog", () => {
   );
 });
 
-void test("accepts a Claude plugin manifest", () => {
-  const root = mkdtempSync(join(tmpdir(), "catalog-claude-plugin-"));
+void test("validates nested reference documents", () => {
+  const root = mkdtempSync(join(tmpdir(), "catalog-reference-documents-"));
+  createPlugin(root);
   createSkill(
     root,
     "useful-test",
     "Perform a useful test when repository behavior needs validation.",
   );
-  createPlugin(root, "useful-plugin", "claude");
-
-  assert.deepEqual(validateCatalog(root).errors, []);
-});
-
-void test("accepts a cross-runtime plugin with both manifests", () => {
-  const root = mkdtempSync(join(tmpdir(), "catalog-cross-runtime-plugin-"));
-  createSkill(
+  const referencesDirectory = join(
     root,
+    "plugins",
+    "useful-plugin",
+    "skills",
     "useful-test",
-    "Perform a useful test when repository behavior needs validation.",
+    "references",
+    "nested",
   );
-  createPlugin(root, "useful-plugin", "claude");
-  createPlugin(root, "useful-plugin", "codex");
+  mkdirSync(referencesDirectory, { recursive: true });
+  writeFileSync(
+    join(referencesDirectory, "guide.md"),
+    "Use $missing-skill and read the [missing guide](missing.md).\n",
+  );
 
-  assert.deepEqual(validateCatalog(root).errors, []);
+  const errors = validateCatalog(root).errors.join("\n");
+  assert.match(errors, /references unknown catalog skill \$missing-skill/);
+  assert.match(errors, /local link target does not exist: missing\.md/);
 });
 
-void test("rejects a plugin without a supported runtime manifest", () => {
+void test("rejects a plugin without a portable root manifest", () => {
   const root = mkdtempSync(join(tmpdir(), "catalog-plugin-no-manifest-"));
   createSkill(
     root,
     "useful-test",
     "Perform a useful test when repository behavior needs validation.",
   );
-  mkdirSync(join(root, "plugins", "useful-plugin"), { recursive: true });
 
   assert.match(
     validateCatalog(root).errors.join("\n"),
-    /must contain a supported Codex or Claude manifest/,
+    /must contain a portable root plugin\.json manifest/,
+  );
+});
+
+void test("rejects a portable manifest without the Agent Plugins schema", () => {
+  const root = mkdtempSync(join(tmpdir(), "catalog-plugin-schema-"));
+  createSkill(
+    root,
+    "useful-test",
+    "Perform a useful test when repository behavior needs validation.",
+  );
+  writeFileSync(
+    join(root, "plugins", "useful-plugin", "plugin.json"),
+    JSON.stringify({
+      name: "useful-plugin",
+      version: "1.0.0",
+      description: "A portable test plugin with useful runtime behavior.",
+    }),
+  );
+
+  assert.match(
+    validateCatalog(root).errors.join("\n"),
+    /must declare the Agent Plugins 1\.0\.0 schema/,
+  );
+});
+
+void test("rejects a manifest name that differs from its plugin directory", () => {
+  const root = mkdtempSync(join(tmpdir(), "catalog-plugin-name-"));
+  createPlugin(root, "useful-plugin");
+  createSkill(
+    root,
+    "useful-test",
+    "Perform a useful test when repository behavior needs validation.",
+  );
+  const manifestFile = join(root, "plugins", "useful-plugin", "plugin.json");
+  const manifest = JSON.parse(readFile(manifestFile)) as { name: string };
+  manifest.name = "wrong-plugin";
+  writeFileSync(manifestFile, JSON.stringify(manifest));
+
+  assert.match(
+    validateCatalog(root).errors.join("\n"),
+    /name must match the plugin directory/,
+  );
+});
+
+void test("rejects a plugin without a Claude Code manifest", () => {
+  const root = mkdtempSync(
+    join(tmpdir(), "catalog-plugin-no-claude-manifest-"),
+  );
+  createSkill(
+    root,
+    "useful-test",
+    "Perform a useful test when repository behavior needs validation.",
+  );
+  mkdirSync(join(root, "plugins", "useful-plugin"), { recursive: true });
+  writeFileSync(
+    join(root, "plugins", "useful-plugin", "plugin.json"),
+    JSON.stringify({
+      $schema: "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+      name: "useful-plugin",
+      version: "1.0.0",
+      description: "A portable test plugin with useful runtime behavior.",
+    }),
+  );
+
+  assert.match(
+    validateCatalog(root).errors.join("\n"),
+    /must contain a Claude Code \.claude-plugin\/plugin\.json manifest/,
+  );
+});
+
+void test("rejects mismatched portable and Claude Code versions", () => {
+  const root = mkdtempSync(join(tmpdir(), "catalog-plugin-version-mismatch-"));
+  createPlugin(root);
+  createSkill(
+    root,
+    "useful-test",
+    "Perform a useful test when repository behavior needs validation.",
+  );
+  const manifestFile = join(
+    root,
+    "plugins",
+    "useful-plugin",
+    ".claude-plugin",
+    "plugin.json",
+  );
+  const manifest = JSON.parse(readFile(manifestFile)) as { version: string };
+  manifest.version = "2.0.0";
+  writeFileSync(manifestFile, JSON.stringify(manifest));
+
+  assert.match(
+    validateCatalog(root).errors.join("\n"),
+    /version must match the portable root manifest/,
   );
 });
 

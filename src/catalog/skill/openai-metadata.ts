@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 
 import { parse as parseYaml } from "yaml";
 
-import type { OpenAiMetadata } from "./types.js";
+import type { OpenAiMetadata } from "../../shared/types/catalog.js";
 
 export function validateOpenAiMetadata(
   metadataFile: string,

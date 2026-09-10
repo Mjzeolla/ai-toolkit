@@ -1,46 +1,159 @@
 # MZeolla AI Toolkit
 
-Reusable building blocks for capable AI agents—small enough to review, structured enough
-to validate, and portable enough to install without adopting an entire framework.
+A marketplace of installable Agent Plugins for capable AI coding agents—small enough to
+review, structured enough to validate, and portable across compatible hosts.
 
-This repository contains independently authored skills, future plugin packages, and the
-tooling that keeps both consistent. Every catalog change passes formatting, schema,
+This repository contains independently authored skills within their owning plugins and the
+tooling that keeps them consistent. Every plugin change passes formatting, schema,
 behavioral, spelling, link, secret, and supply-chain checks before release.
 
-## Start here
+## Install and manage
 
-Install [Mise](https://mise.jdx.dev/getting-started.html), then let the repository install
-its pinned Node, pnpm, Python, pre-commit, ShellCheck, Lychee, and typos toolchain:
+Add this repository as a marketplace, install `core-skills`, and start a new session so the
+runtime loads the plugin. The commands below use the marketplace name declared by this
+repository: `mzeolla-ai-toolkit`.
+
+For the common lifecycle, the Make wrapper defaults to Codex and accepts
+`PLUGIN_AGENT=codex|claude|grok|copilot`:
+
+```bash
+make plugin-marketplace-add
+make plugin-install
+make plugin-list
+make plugin-update
+
+# Use another supported runtime
+make plugin-install PLUGIN_AGENT=claude
+```
+
+The wrapper also provides `plugin-marketplace-list`, `plugin-uninstall`, and
+`plugin-marketplace-remove`. These targets change the selected runtime's user-level plugin
+state; review the commands below before running them. Override `PLUGIN_NAME`,
+`MARKETPLACE_NAME`, or `MARKETPLACE_SOURCE` when managing a fork or another package.
+
+### Codex
+
+```bash
+# Add the marketplace and install the plugin
+codex plugin marketplace add Mjzeolla/ai-toolkit
+codex plugin add core-skills@mzeolla-ai-toolkit
+
+# Inspect installed and available plugins
+codex plugin marketplace list
+codex plugin list --available --json
+
+# Refresh the marketplace and reinstall the latest published plugin version
+codex plugin marketplace upgrade mzeolla-ai-toolkit
+codex plugin remove core-skills@mzeolla-ai-toolkit
+codex plugin add core-skills@mzeolla-ai-toolkit
+
+# Remove the plugin or marketplace
+codex plugin remove core-skills@mzeolla-ai-toolkit
+codex plugin marketplace remove mzeolla-ai-toolkit
+```
+
+Codex also provides an interactive browser: launch `codex`, then enter `/plugins`.
+See the [OpenAI plugin documentation](https://learn.chatgpt.com/docs/plugins) for supported
+surfaces and browser behavior.
+
+### Claude Code
+
+```bash
+# Add the marketplace and install the plugin
+claude plugin marketplace add Mjzeolla/ai-toolkit
+claude plugin install core-skills@mzeolla-ai-toolkit
+
+# Inspect, refresh, and update
+claude plugin list
+claude plugin marketplace update mzeolla-ai-toolkit
+claude plugin update core-skills@mzeolla-ai-toolkit
+
+# Remove the plugin or marketplace
+claude plugin uninstall core-skills@mzeolla-ai-toolkit
+claude plugin marketplace remove mzeolla-ai-toolkit
+```
+
+See the [Claude Code plugin reference](https://code.claude.com/docs/en/plugins-reference)
+for scopes, enablement, and automatic updates.
+
+### Grok Build
+
+Grok accepts the repository's Claude-compatible marketplace and plugin manifest.
+
+```bash
+# Add the marketplace, install the plugin, and enable it
+grok plugin marketplace add Mjzeolla/ai-toolkit
+grok plugin install core-skills --trust
+grok plugin enable core-skills
+
+# Inspect, refresh, and update
+grok plugin marketplace list
+grok plugin list --json
+grok plugin details core-skills
+grok plugin marketplace update mzeolla-ai-toolkit
+grok plugin update core-skills
+
+# Disable or remove the plugin
+grok plugin disable core-skills
+grok plugin uninstall core-skills --confirm
+grok plugin marketplace remove https://github.com/Mjzeolla/ai-toolkit.git
+```
+
+See the [Grok Build plugin guide](https://github.com/xai-org/grok-build/blob/main/crates/codegen/xai-grok-pager/docs/user-guide/09-plugins.md)
+for trust and enablement behavior.
+
+### GitHub Copilot CLI
+
+GitHub Copilot CLI supports the portable root manifest and the Claude-compatible
+marketplace included in this repository.
+
+```bash
+# Add and browse the marketplace, then install the plugin
+copilot plugin marketplace add Mjzeolla/ai-toolkit
+copilot plugin marketplace browse mzeolla-ai-toolkit
+copilot plugin install core-skills@mzeolla-ai-toolkit
+
+# Inspect, refresh, and update
+copilot plugin marketplace list
+copilot plugin list
+copilot plugin marketplace update mzeolla-ai-toolkit
+copilot plugin update core-skills
+
+# Remove the plugin or marketplace
+copilot plugin uninstall core-skills
+copilot plugin marketplace remove mzeolla-ai-toolkit
+```
+
+See the [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference)
+for direct-source installs, enablement, and bulk updates.
+
+Only use `--trust` after reviewing the repository; plugins run with the current user's
+permissions. ChatGPT desktop uses its Plugins interface rather than these shell commands.
+Other coding agents need an explicit compatibility layer before they should be advertised
+as supported.
+
+### Local validation
+
+```bash
+make validate
+claude plugin validate .
+grok plugin validate .
+```
+
+`make validate` is always available after repository setup. The runtime-specific commands
+require the corresponding CLI to be installed.
+
+The package boundary is `plugins/core-skills/`; no per-skill symlinks or copies into global
+discovery directories are required.
+
+Contributors should install [Mise](https://mise.jdx.dev/getting-started.html), then let the
+repository install its pinned Node, pnpm, Python, pre-commit, ShellCheck, Lychee, and typos
+toolchain:
 
 ```bash
 make setup
 make ci
 ```
-
-Link every skill into the standard Agent Skills-compatible and Claude Code directories:
-
-```bash
-make link-skills
-```
-
-The default destinations are:
-
-```text
-~/.agents/skills   Agent Skills-compatible harnesses, including Codex
-~/.claude/skills   Claude Code
-```
-
-Select one harness or provide a custom discovery directory when needed:
-
-```bash
-./scripts/dev/link-skills --agent claude
-./scripts/dev/link-skills --agent codex
-./scripts/dev/link-skills --target "$HOME/.my-agent/skills"
-```
-
-The links point back to this checkout, so reviewed edits are available immediately. The
-linker never replaces an existing skill with the same name. Remove only the links it
-owns with `make unlink-skills`.
 
 ## Catalog
 
@@ -83,8 +196,8 @@ owns with `make unlink-skills`.
 | `primary-source-research` | Current technical claims need authoritative evidence and links |
 | `to-ticket`               | A request or decision must become implementation-ready work    |
 
-Categories help people browse the source catalog; they do not change a skill's runtime
-name. The local linker flattens them into each selected agent's discovery directory.
+The sections above help people browse the plugin; skills are stored flat so their source
+paths match the runtime discovery layout.
 
 ### Composition
 
@@ -110,10 +223,11 @@ eligible for normal discovery when their descriptions match the request.
 ## Repository map
 
 ```text
-skills/
-├── building/<skill-name>/
-└── productivity/<skill-name>/
-plugins/<plugin-name>/
+plugins/
+└── core-skills/
+    ├── plugin.json
+    ├── .claude-plugin/plugin.json
+    └── skills/<skill-name>/
 scripts/
 ├── ci/       deterministic repository validation
 ├── dev/      local contributor utilities
@@ -124,8 +238,8 @@ docs/         architecture and authoring guides
 ```
 
 Each skill owns its `SKILL.md` and optional `agents/`, `scripts/`, `references/`, and
-`assets/`. Plugins are added only when a capability needs a separately versioned bundle of
-skills, agents, hooks, tools, or app metadata.
+`assets/`. Each directory under `plugins/` is an independent versioned installation
+boundary.
 
 ## Common commands
 
@@ -169,7 +283,8 @@ guide:
 
 ## Releases
 
-Signed semantic-version tags publish a validated catalog archive through GitHub Releases:
+Signed semantic-version tags publish a validated Agent Plugin archive through GitHub
+Releases:
 
 ```bash
 git tag -s v0.1.0 -m "MZeolla AI Toolkit v0.1.0"

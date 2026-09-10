@@ -1,12 +1,13 @@
 import { parse as parseYaml } from "yaml";
 
-import type { SkillFrontmatter } from "./types.js";
+import { frontmatterPattern } from "../../shared/constants/patterns.js";
+import type { SkillFrontmatter } from "../../shared/types/catalog.js";
 
 export function parseFrontmatter(
   content: string,
   file: string,
 ): { body: string; data: SkillFrontmatter } {
-  const match = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/.exec(content);
+  const match = frontmatterPattern.exec(content);
   if (!match?.[1] || match[2] === undefined) {
     throw new Error(`${file}: expected YAML frontmatter delimited by ---`);
   }

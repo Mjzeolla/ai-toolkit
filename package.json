@@ -2,7 +2,7 @@
   "name": "MZeolla",
   "version": "0.1.0",
   "private": true,
-  "description": "Validated catalog of reusable AI skills and plugins.",
+  "description": "Marketplace and validation toolkit for portable AI coding-agent plugins.",
   "type": "module",
   "packageManager": "pnpm@11.20.0",
   "engines": {
