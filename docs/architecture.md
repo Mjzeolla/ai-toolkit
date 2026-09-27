@@ -33,6 +33,14 @@ are installed into a flat discovery directory. Use ordinary Markdown links for s
 files owned by the same skill, such as `references/schema.md`; use `$skill-name` only for an
 optional handoff to another installed capability.
 
+Use `$skill-name` only for capabilities bundled in the same plugin or otherwise guaranteed
+by the target environment. For an optional third-party skill, refer to it by product or
+skill name, detect whether it is available, and retain a useful fallback. Link to the
+upstream installation instructions for users who want the integration, but never install or
+update it implicitly. Current portable plugin manifests do not resolve cross-marketplace
+skill dependencies; tool dependencies declared in product-specific metadata are not a
+substitute for skill installation.
+
 Interaction modes and broad coordinators are explicit-only. Focused capabilities remain
 implicitly discoverable when their routing descriptions match. This prevents a general task
 from silently switching into interview, terse-response, delegation, or no-questions mode.

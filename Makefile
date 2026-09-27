@@ -60,8 +60,8 @@ typecheck: ## Run strict TypeScript checking
 test: ## Run validator unit tests
 	mise exec -- pnpm test
 
-hooks: ## Install the versioned pre-commit and pre-push hooks
-	mise exec -- pre-commit install --hook-type pre-commit --hook-type pre-push
+hooks: ## Install the versioned Husky Git hooks
+	mise exec -- pnpm exec husky
 
 plugin-marketplace-add: ## Add the marketplace for PLUGIN_AGENT
 	@case "$(PLUGIN_AGENT)" in \

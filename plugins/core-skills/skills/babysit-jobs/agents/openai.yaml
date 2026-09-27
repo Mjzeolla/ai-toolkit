@@ -1,0 +1,4 @@
+interface:
+  display_name: "Babysit Jobs"
+  short_description: "Monitor jobs through a proven terminal state"
+  default_prompt: "Use $babysit-jobs to monitor this work until it completes or needs action."

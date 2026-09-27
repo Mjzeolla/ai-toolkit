@@ -1,0 +1,4 @@
+interface:
+  display_name: "Organize Codebase"
+  short_description: "Design coherent application folder structures"
+  default_prompt: "Use $organize-codebase to propose or improve this repository's folder structure."

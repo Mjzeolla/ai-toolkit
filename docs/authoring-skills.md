@@ -38,6 +38,13 @@ of the workflow benefits from that specialization. State the condition next to t
 reference. The current skill must still define its own outcome and boundaries; a chain is
 not a substitute for instructions.
 
+Reserve `$skill-name` references for skills bundled with the same plugin or guaranteed in
+the target environment. Treat a third-party skill as an optional integration: name it in
+plain language, check availability before use, preserve a fallback, and point users to its
+maintainer-owned installation instructions. Do not copy, install, update, or imply the
+presence of an external skill. Create a separate integration plugin when an external
+capability must have an independent installation or version lifecycle.
+
 Use `$task-completion` for end-to-end engineering coordination and `$autonomous-loop` for
 bounded iterative execution. Use `$subagent-coordination` only when work can be partitioned
 into independent scopes and the target environment supports delegation. Do not require

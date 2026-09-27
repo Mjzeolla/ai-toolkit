@@ -11,6 +11,5 @@ fi
 
 mise install
 mise exec -- pnpm install --frozen-lockfile
-mise exec -- pre-commit install --hook-type pre-commit --hook-type pre-push
 
 echo "Repository setup complete. Run: make ci"

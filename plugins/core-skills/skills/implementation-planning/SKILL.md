@@ -15,6 +15,10 @@ Inspect the relevant entrypoints, configuration, tests, deployment path, and mai
 documentation. Identify existing conventions and current worktree changes. Distinguish
 facts found in the repository from assumptions and unresolved decisions.
 
+Use `$reuse-code` to identify existing components, utilities, contracts, and dependencies
+that the implementation can extend instead of planning parallel replacements. Use
+`$organize-codebase` when folder ownership or target placement is itself part of the plan.
+
 Describe the intended end state in observable terms. Include important invariants such
 as compatibility, data ownership, authorization boundaries, rollback needs, and which
 system remains authoritative during a migration.

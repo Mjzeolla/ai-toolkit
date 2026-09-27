@@ -1,0 +1,4 @@
+./scripts/ci/check-staged
+make check
+./scripts/ci/check-typos
+./scripts/ci/check-links --offline

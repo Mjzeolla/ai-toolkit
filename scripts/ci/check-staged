@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repository_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$repository_root"
+
+maximum_size_bytes=$((1024 * 1024))
+failed=0
+
+while IFS= read -r -d '' file; do
+  object=":$file"
+  size="$(git cat-file -s "$object")"
+  if ((size > maximum_size_bytes)); then
+    echo "ERROR: staged file exceeds 1 MiB: $file ($size bytes)" >&2
+    failed=1
+  fi
+
+  mode="$(git ls-files -s -- "$file" | awk 'NR == 1 { print $1 }')"
+  if [[ "$mode" == "120000" ]]; then
+    target="$(git show "$object")"
+    if [[ ! -e "$(dirname "$file")/$target" ]]; then
+      echo "ERROR: staged symlink target does not exist: $file -> $target" >&2
+      failed=1
+    fi
+    continue
+  fi
+
+  if git show "$object" | LC_ALL=C grep -Iq . &&
+    git show "$object" | grep -En '^(<<<<<<<|=======|>>>>>>>)( |$)' >/dev/null; then
+    echo "ERROR: staged file contains merge-conflict markers: $file" >&2
+    failed=1
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+
+if ((failed)); then
+  exit 1
+fi

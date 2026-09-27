@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reuse Code"
+  short_description: "Find and reuse existing implementations"
+  default_prompt: "Use $reuse-code to find reusable code or safely consolidate duplication."

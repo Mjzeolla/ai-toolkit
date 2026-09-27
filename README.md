@@ -127,10 +127,65 @@ copilot plugin marketplace remove mzeolla-ai-toolkit
 See the [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference)
 for direct-source installs, enablement, and bulk updates.
 
+### Agent Skills CLI
+
+The [`skills` CLI](https://github.com/vercel-labs/skills) can install individual skills
+for agents that support the Agent Skills directory format but do not consume this
+repository's plugin marketplace. Target the `core-skills` package directory so discovery
+starts at its `skills/` root:
+
+```bash
+# Inspect the available skills without installing them
+npx skills add https://github.com/Mjzeolla/ai-toolkit/tree/main/plugins/core-skills --list
+
+# Install one skill into the current project for Codex
+npx skills add https://github.com/Mjzeolla/ai-toolkit/tree/main/plugins/core-skills \
+  --skill code-review --agent codex
+
+# Install every skill globally for Codex
+npx skills add https://github.com/Mjzeolla/ai-toolkit/tree/main/plugins/core-skills \
+  --skill '*' --agent codex --global
+
+# Use one skill for a session without installing it
+npx skills use https://github.com/Mjzeolla/ai-toolkit/tree/main/plugins/core-skills \
+  --skill code-review --agent codex
+
+# Inspect, update, or remove installed skills
+npx skills list --agent codex
+npx skills update code-review
+npx skills remove code-review --agent codex
+```
+
+Replace `codex` with another agent identifier supported by the CLI. Prefer the native
+plugin installation above when available: it preserves the versioned `core-skills`
+package boundary, while `npx skills` installs selected skill directories directly.
+
 Only use `--trust` after reviewing the repository; plugins run with the current user's
 permissions. ChatGPT desktop uses its Plugins interface rather than these shell commands.
 Other coding agents need an explicit compatibility layer before they should be advertised
 as supported.
+
+### Optional integrations
+
+#### Archify
+
+The `architecture-diagramming` skill works without Archify, but can use the separately
+maintained [Archify skill](https://github.com/tt-a1i/archify) for validated, interactive,
+self-contained HTML diagrams. Install Archify through its upstream-supported installer:
+
+```bash
+npx skills add tt-a1i/archify -g
+```
+
+To try Archify in Codex without installing it permanently:
+
+```bash
+npx skills use tt-a1i/archify@archify --agent codex
+```
+
+Start a new agent session after installation so the runtime can discover the new skill.
+Archify remains optional and independently versioned; `core-skills` does not install,
+vendor, or update it automatically.
 
 ### Local validation
 
@@ -147,7 +202,7 @@ The package boundary is `plugins/core-skills/`; no per-skill symlinks or copies 
 discovery directories are required.
 
 Contributors should install [Mise](https://mise.jdx.dev/getting-started.html), then let the
-repository install its pinned Node, pnpm, Python, pre-commit, ShellCheck, Lychee, and typos
+repository install its pinned Node, pnpm, Python, ShellCheck, Lychee, and typos
 toolchain:
 
 ```bash
@@ -161,8 +216,10 @@ make ci
 
 | Skill                        | Use it when                                                      |
 | ---------------------------- | ---------------------------------------------------------------- |
+| `architecture-diagramming`   | System relationships need a clear, editable visual               |
 | `authoring-skills`           | A reusable agent capability needs deliberate design              |
 | `autonomous-loop`            | Work should iterate autonomously toward a bounded outcome        |
+| `babysit-jobs`               | Existing commands, checks, or reviews need terminal monitoring   |
 | `change-review`              | Any concrete change needs evidence-backed defect analysis        |
 | `code-review`                | Code needs actionable correctness and security review            |
 | `data-model`                 | Persistent entities, invariants, and access patterns need design |
@@ -173,9 +230,11 @@ make ci
 | `implementation-planning`    | A repository-grounded request needs an executable change plan    |
 | `improve-architecture`       | Software boundaries or coupling need deliberate redesign         |
 | `migration-planning`         | A transition needs staged compatibility and recovery             |
+| `organize-codebase`          | Application folders need coherent ownership and boundaries       |
 | `performance-analysis`       | Latency, throughput, or capacity needs measurement               |
 | `production-ready`           | A workload needs an evidence-based operational readiness review  |
 | `red-green-testing`          | A behavior change benefits from proving the test fails first     |
+| `reuse-code`                 | Existing code should be found before adding or duplicating it    |
 | `security-audit`             | A defined surface needs an authorized security assessment        |
 | `subagent-coordination`      | Independent workstreams can be delegated safely                  |
 | `systematic-debugging`       | A failure must be reproduced and isolated before repair          |
@@ -259,9 +318,11 @@ splitting, and similar shell defects without executing the scripts.
 
 Git hooks validate links at two levels:
 
-- pre-commit runs Lychee with `--offline`, which validates repository-local file targets
+- Husky's pre-commit hook rejects oversized files, broken symlinks, and merge-conflict
+  markers before running the offline repository checks and Lychee with `--offline`, which
+  validates repository-local file targets
   without requiring network access;
-- pre-push runs the full Lychee check, including external HTTP links;
+- Husky's pre-push hook runs `make ci`, including the full external HTTP link check;
 - CI repeats the full check so bypassing local hooks cannot merge broken links.
 
 `pnpm check` contains only Node-managed checks. `make ci` is the complete repository check:

@@ -110,11 +110,6 @@ url = "https://nodejs.org/dist/v22.23.2/node-v22.23.2-darwin-x64.tar.gz"
 checksum = "sha256:1177b4137ba5adaa56354ae40f1080c7450e8ae09cecb47da459d1c52ac99f97"
 url = "https://nodejs.org/dist/v22.23.2/node-v22.23.2-win-x64.zip"
 
-[[tools."pipx:pre-commit"]]
-version = "4.5.1"
-backend = "pipx:pre-commit"
-specifiers = ["4.5.1"]
-
 [[tools."pipx:yamllint"]]
 version = "1.37.1"
 backend = "pipx:yamllint"

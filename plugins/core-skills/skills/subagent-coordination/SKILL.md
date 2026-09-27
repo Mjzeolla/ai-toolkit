@@ -25,6 +25,9 @@ inspecting actual artifacts and evidence; do not accept summaries as proof. Reco
 conflicts against the user's outcome and repository conventions, then run combined
 validation.
 
+Use `$babysit-jobs` when the remaining responsibility is to wait for delegated tasks and
+surface completion or required attention, rather than to create additional workstreams.
+
 Use `$task-completion` as the parent workflow and specialized skills inside a delegated
 task when appropriate. Stop or redirect a subagent when scope changes, its work overlaps,
 or the expected value disappears. Credit unresolved uncertainty in the final handoff.

@@ -16,9 +16,20 @@ Versions follow semantic versioning.
 - Documented complete plugin lifecycle commands for Codex, Claude Code, Grok Build, and
   GitHub Copilot CLI.
 - Added parameterized Make targets for common marketplace and plugin lifecycle operations.
+- Documented direct per-skill installation and lifecycle commands through the cross-agent
+  `npx skills` CLI.
+- Documented Archify as an optional external integration and clarified cross-plugin skill
+  reference and fallback conventions.
+- Replaced the Python pre-commit framework with Husky-managed pre-commit and pre-push
+  hooks now that Node is a required repository runtime.
 
 ### Added
 
+- Architecture diagramming workflow with format-specific draw.io and Archify guidance.
+- Codebase organization profiles for React, Node.js, Python, and multi-application
+  repositories, using concern folders instead of flat domain or shared-file dumps.
+- Search-before-implementation guidance for code reuse and safe deduplication.
+- Bounded monitoring guidance for commands, CI checks, reviews, and delegated jobs.
 - Initial reusable skill catalog organized into building and productivity categories.
 - Expanded building and productivity workflows, including task completion, autonomous
   execution, selective skill composition, and subagent coordination.
