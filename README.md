@@ -19,6 +19,104 @@ catalog. Claude Code, Grok Build, GitHub Copilot CLI, Make wrappers, selective `
 installation, updates, and removal are documented in the
 [installation guide](docs/getting-started/installation.md).
 
+### Distributor commands
+
+Use the commands for your coding agent. Each example covers marketplace registration,
+installation, inspection, update, and removal.
+
+#### Codex
+
+```bash
+# Add the marketplace and install the plugin
+codex plugin marketplace add Mjzeolla/ai-toolkit
+codex plugin add core-skills@mzeolla-ai-toolkit
+
+# Inspect the installation
+codex plugin marketplace list
+codex plugin list --available --json
+
+# Refresh the marketplace and reinstall the current plugin release
+codex plugin marketplace upgrade mzeolla-ai-toolkit
+codex plugin remove core-skills@mzeolla-ai-toolkit
+codex plugin add core-skills@mzeolla-ai-toolkit
+
+# Remove the plugin and marketplace
+codex plugin remove core-skills@mzeolla-ai-toolkit
+codex plugin marketplace remove mzeolla-ai-toolkit
+```
+
+#### Claude Code
+
+```bash
+# Add the marketplace and install the plugin
+claude plugin marketplace add Mjzeolla/ai-toolkit
+claude plugin install core-skills@mzeolla-ai-toolkit
+
+# Inspect and update the installation
+claude plugin marketplace list
+claude plugin list
+claude plugin marketplace update mzeolla-ai-toolkit
+claude plugin update core-skills@mzeolla-ai-toolkit
+
+# Remove the plugin and marketplace
+claude plugin uninstall core-skills@mzeolla-ai-toolkit
+claude plugin marketplace remove mzeolla-ai-toolkit
+```
+
+#### Grok Build
+
+Review the trust prompt before using `--trust`.
+
+```bash
+# Add the marketplace, install the plugin, and enable it
+grok plugin marketplace add Mjzeolla/ai-toolkit
+grok plugin install core-skills --trust
+grok plugin enable core-skills
+
+# Inspect and update the installation
+grok plugin marketplace list
+grok plugin list --json
+grok plugin marketplace update mzeolla-ai-toolkit
+grok plugin update core-skills
+
+# Remove the plugin and marketplace
+grok plugin disable core-skills
+grok plugin uninstall core-skills --confirm
+grok plugin marketplace remove https://github.com/Mjzeolla/ai-toolkit.git
+```
+
+#### GitHub Copilot CLI
+
+```bash
+# Add and browse the marketplace, then install the plugin
+copilot plugin marketplace add Mjzeolla/ai-toolkit
+copilot plugin marketplace browse mzeolla-ai-toolkit
+copilot plugin install core-skills@mzeolla-ai-toolkit
+
+# Inspect and update the installation
+copilot plugin marketplace list
+copilot plugin list
+copilot plugin marketplace update mzeolla-ai-toolkit
+copilot plugin update core-skills
+
+# Remove the plugin and marketplace
+copilot plugin uninstall core-skills
+copilot plugin marketplace remove mzeolla-ai-toolkit
+```
+
+The equivalent repository wrappers use Codex by default. Select another distributor with
+`PLUGIN_AGENT=claude`, `PLUGIN_AGENT=grok`, or `PLUGIN_AGENT=copilot`.
+
+```bash
+make plugin-marketplace-add PLUGIN_AGENT=codex
+make plugin-install PLUGIN_AGENT=codex
+make plugin-marketplace-list PLUGIN_AGENT=codex
+make plugin-list PLUGIN_AGENT=codex
+make plugin-update PLUGIN_AGENT=codex
+make plugin-uninstall PLUGIN_AGENT=codex
+make plugin-marketplace-remove PLUGIN_AGENT=codex
+```
+
 ## What should be installed?
 
 For normal use, install the entire plugin. Internal dollar-prefixed skill references are
