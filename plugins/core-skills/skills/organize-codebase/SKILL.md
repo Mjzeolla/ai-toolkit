@@ -30,6 +30,10 @@ Read only the reference matching the current codebase:
 - [Node.js services](references/node-service.md)
 - [Python services](references/python-service.md)
 - [Full-stack and multi-application monorepos](references/monorepo.md)
+- [Documentation sites and repository docs](references/documentation.md)
+
+Read [repository scripting layers](references/scripting-layer.md) when setup, CI, development,
+release, migration, or operational automation needs a coherent home.
 
 Present the proposed tree with responsibilities, allowed dependency direction, examples of
 where representative existing files belong, and important exceptions. When restructuring

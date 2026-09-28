@@ -32,6 +32,8 @@ Look for behavior that is incorrect under realistic inputs, including:
 
 Run focused, non-mutating checks when they materially increase confidence. Do not infer a
 defect solely from unfamiliar code; trace the relevant execution path and cite evidence.
+Use `$use-rtk` for noisy supported validation commands only when RTK is already available.
+Do not rely on filtered diffs, logs, or failures when omitted detail could change a finding.
 
 ## Report
 

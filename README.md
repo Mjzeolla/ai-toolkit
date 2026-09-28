@@ -1,246 +1,88 @@
 # MZeolla AI Toolkit
 
-A marketplace of installable Agent Plugins for capable AI coding agents—small enough to
-review, structured enough to validate, and portable across compatible hosts.
+A portable marketplace of focused engineering and productivity skills for capable AI
+coding agents. Skills are small enough to review, plugins provide versioned installation
+boundaries, and repository tooling validates structure, metadata, references, and releases.
 
-This repository contains independently authored skills within their owning plugins and the
-tooling that keeps them consistent. Every plugin change passes formatting, schema,
-behavioral, spelling, link, secret, and supply-chain checks before release.
+## Quick start
 
-## Install and manage
-
-Add this repository as a marketplace, install `core-skills`, and start a new session so the
-runtime loads the plugin. The commands below use the marketplace name declared by this
-repository: `mzeolla-ai-toolkit`.
-
-For the common lifecycle, the Make wrapper defaults to Codex and accepts
-`PLUGIN_AGENT=codex|claude|grok|copilot`:
+Install the complete `core-skills` plugin. This is the recommended setup because every
+internal skill reference is then available when a workflow needs it.
 
 ```bash
-make plugin-marketplace-add
-make plugin-install
-make plugin-list
-make plugin-update
-
-# Use another supported runtime
-make plugin-install PLUGIN_AGENT=claude
-```
-
-The wrapper also provides `plugin-marketplace-list`, `plugin-uninstall`, and
-`plugin-marketplace-remove`. These targets change the selected runtime's user-level plugin
-state; review the commands below before running them. Override `PLUGIN_NAME`,
-`MARKETPLACE_NAME`, or `MARKETPLACE_SOURCE` when managing a fork or another package.
-
-### Codex
-
-```bash
-# Add the marketplace and install the plugin
 codex plugin marketplace add Mjzeolla/ai-toolkit
 codex plugin add core-skills@mzeolla-ai-toolkit
-
-# Inspect installed and available plugins
-codex plugin marketplace list
-codex plugin list --available --json
-
-# Refresh the marketplace and reinstall the latest published plugin version
-codex plugin marketplace upgrade mzeolla-ai-toolkit
-codex plugin remove core-skills@mzeolla-ai-toolkit
-codex plugin add core-skills@mzeolla-ai-toolkit
-
-# Remove the plugin or marketplace
-codex plugin remove core-skills@mzeolla-ai-toolkit
-codex plugin marketplace remove mzeolla-ai-toolkit
 ```
 
-Codex also provides an interactive browser: launch `codex`, then enter `/plugins`.
-See the [OpenAI plugin documentation](https://learn.chatgpt.com/docs/plugins) for supported
-surfaces and browser behavior.
+Start a new session after installation or update so the runtime discovers the current
+catalog. Claude Code, Grok Build, GitHub Copilot CLI, Make wrappers, selective `npx skills`
+installation, updates, and removal are documented in the
+[installation guide](docs/getting-started/installation.md).
 
-### Claude Code
+## What should be installed?
 
-```bash
-# Add the marketplace and install the plugin
-claude plugin marketplace add Mjzeolla/ai-toolkit
-claude plugin install core-skills@mzeolla-ai-toolkit
+For normal use, install the entire plugin. Internal dollar-prefixed skill references are
+conditional routing—not hidden package imports—but full installation preserves every
+specialized handoff.
 
-# Inspect, refresh, and update
-claude plugin list
-claude plugin marketplace update mzeolla-ai-toolkit
-claude plugin update core-skills@mzeolla-ai-toolkit
+Selective installation is supported for constrained environments. Recommended companion
+sets include:
 
-# Remove the plugin or marketplace
-claude plugin uninstall core-skills@mzeolla-ai-toolkit
-claude plugin marketplace remove mzeolla-ai-toolkit
-```
+| Goal                     | Start with                                         | Useful companions                                                                                                         |
+| ------------------------ | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Start a repository       | `initialize-repository`                            | `organize-codebase`, `production-ready`, `test-writing`                                                                   |
+| Implement changes        | `task-completion`, `autonomous-loop`               | `explore-codebase`, `reuse-code`, `implementation-planning`, `test-writing`, `systematic-debugging`, `raise-pull-request` |
+| Review changes           | `code-review`, `change-review`                     | `data-model`, `security-audit`, `test-writing`                                                                            |
+| Improve architecture     | `improve-architecture`, `architecture-diagramming` | `explore-codebase`, `organize-codebase`, `migration-planning`, `production-ready`                                         |
+| Create documentation     | `author-documentation`, `maintain-wiki`            | `organize-codebase`, `architecture-diagramming`, `primary-source-research`, `raise-pull-request`                          |
+| Coordinate parallel work | `subagent-coordination`, `git-worktrees`           | `task-completion`, `babysit-jobs`                                                                                         |
+| Improve agent tooling    | `select-agent-tooling`                             | `use-rtk`, `primary-source-research`, `explore-codebase`                                                                  |
 
-See the [Claude Code plugin reference](https://code.claude.com/docs/en/plugins-reference)
-for scopes, enablement, and automatic updates.
+These companions are recommendations, not automatically installed dependencies. See
+[Skill composition and installation profiles](docs/concepts/skill-composition.md) for the
+complete model and additional profiles.
 
-### Grok Build
-
-Grok accepts the repository's Claude-compatible marketplace and plugin manifest.
-
-```bash
-# Add the marketplace, install the plugin, and enable it
-grok plugin marketplace add Mjzeolla/ai-toolkit
-grok plugin install core-skills --trust
-grok plugin enable core-skills
-
-# Inspect, refresh, and update
-grok plugin marketplace list
-grok plugin list --json
-grok plugin details core-skills
-grok plugin marketplace update mzeolla-ai-toolkit
-grok plugin update core-skills
-
-# Disable or remove the plugin
-grok plugin disable core-skills
-grok plugin uninstall core-skills --confirm
-grok plugin marketplace remove https://github.com/Mjzeolla/ai-toolkit.git
-```
-
-See the [Grok Build plugin guide](https://github.com/xai-org/grok-build/blob/main/crates/codegen/xai-grok-pager/docs/user-guide/09-plugins.md)
-for trust and enablement behavior.
-
-### GitHub Copilot CLI
-
-GitHub Copilot CLI supports the portable root manifest and the Claude-compatible
-marketplace included in this repository.
-
-```bash
-# Add and browse the marketplace, then install the plugin
-copilot plugin marketplace add Mjzeolla/ai-toolkit
-copilot plugin marketplace browse mzeolla-ai-toolkit
-copilot plugin install core-skills@mzeolla-ai-toolkit
-
-# Inspect, refresh, and update
-copilot plugin marketplace list
-copilot plugin list
-copilot plugin marketplace update mzeolla-ai-toolkit
-copilot plugin update core-skills
-
-# Remove the plugin or marketplace
-copilot plugin uninstall core-skills
-copilot plugin marketplace remove mzeolla-ai-toolkit
-```
-
-See the [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference)
-for direct-source installs, enablement, and bulk updates.
-
-### Agent Skills CLI
-
-The [`skills` CLI](https://github.com/vercel-labs/skills) can install individual skills
-for agents that support the Agent Skills directory format but do not consume this
-repository's plugin marketplace. Target the `core-skills` package directory so discovery
-starts at its `skills/` root:
-
-```bash
-# Inspect the available skills without installing them
-npx skills add https://github.com/Mjzeolla/ai-toolkit/tree/main/plugins/core-skills --list
-
-# Install one skill into the current project for Codex
-npx skills add https://github.com/Mjzeolla/ai-toolkit/tree/main/plugins/core-skills \
-  --skill code-review --agent codex
-
-# Install every skill globally for Codex
-npx skills add https://github.com/Mjzeolla/ai-toolkit/tree/main/plugins/core-skills \
-  --skill '*' --agent codex --global
-
-# Use one skill for a session without installing it
-npx skills use https://github.com/Mjzeolla/ai-toolkit/tree/main/plugins/core-skills \
-  --skill code-review --agent codex
-
-# Inspect, update, or remove installed skills
-npx skills list --agent codex
-npx skills update code-review
-npx skills remove code-review --agent codex
-```
-
-Replace `codex` with another agent identifier supported by the CLI. Prefer the native
-plugin installation above when available: it preserves the versioned `core-skills`
-package boundary, while `npx skills` installs selected skill directories directly.
-
-Only use `--trust` after reviewing the repository; plugins run with the current user's
-permissions. ChatGPT desktop uses its Plugins interface rather than these shell commands.
-Other coding agents need an explicit compatibility layer before they should be advertised
-as supported.
-
-### Optional integrations
-
-#### Archify
-
-The `architecture-diagramming` skill works without Archify, but can use the separately
-maintained [Archify skill](https://github.com/tt-a1i/archify) for validated, interactive,
-self-contained HTML diagrams. Install Archify through its upstream-supported installer:
-
-```bash
-npx skills add tt-a1i/archify -g
-```
-
-To try Archify in Codex without installing it permanently:
-
-```bash
-npx skills use tt-a1i/archify@archify --agent codex
-```
-
-Start a new agent session after installation so the runtime can discover the new skill.
-Archify remains optional and independently versioned; `core-skills` does not install,
-vendor, or update it automatically.
-
-### Local validation
-
-```bash
-make validate
-claude plugin validate .
-grok plugin validate .
-```
-
-`make validate` is always available after repository setup. The runtime-specific commands
-require the corresponding CLI to be installed.
-
-The package boundary is `plugins/core-skills/`; no per-skill symlinks or copies into global
-discovery directories are required.
-
-Contributors should install [Mise](https://mise.jdx.dev/getting-started.html), then let the
-repository install its pinned Node, pnpm, Python, ShellCheck, Lychee, and typos
-toolchain:
-
-```bash
-make setup
-make ci
-```
+Archify and RTK are optional external capabilities that remain separately installed and
+versioned. See the [integration guides](docs/integrations/README.md) for trust, setup, and
+fallback behavior.
 
 ## Catalog
 
 ### Building
 
-| Skill                        | Use it when                                                      |
-| ---------------------------- | ---------------------------------------------------------------- |
-| `architecture-diagramming`   | System relationships need a clear, editable visual               |
-| `authoring-skills`           | A reusable agent capability needs deliberate design              |
-| `autonomous-loop`            | Work should iterate autonomously toward a bounded outcome        |
-| `babysit-jobs`               | Existing commands, checks, or reviews need terminal monitoring   |
-| `change-review`              | Any concrete change needs evidence-backed defect analysis        |
-| `code-review`                | Code needs actionable correctness and security review            |
-| `data-model`                 | Persistent entities, invariants, and access patterns need design |
-| `dependency-upgrade`         | A package upgrade needs compatibility and regression control     |
-| `enforce-structure`          | Repository layout rules need deterministic enforcement           |
-| `explore-codebase`           | An unfamiliar codebase must be mapped before acting              |
-| `git-worktrees`              | Concurrent branches need isolated working directories            |
-| `implementation-planning`    | A repository-grounded request needs an executable change plan    |
-| `improve-architecture`       | Software boundaries or coupling need deliberate redesign         |
-| `migration-planning`         | A transition needs staged compatibility and recovery             |
-| `organize-codebase`          | Application folders need coherent ownership and boundaries       |
-| `performance-analysis`       | Latency, throughput, or capacity needs measurement               |
-| `production-ready`           | A workload needs an evidence-based operational readiness review  |
-| `red-green-testing`          | A behavior change benefits from proving the test fails first     |
-| `reuse-code`                 | Existing code should be found before adding or duplicating it    |
-| `security-audit`             | A defined surface needs an authorized security assessment        |
-| `subagent-coordination`      | Independent workstreams can be delegated safely                  |
-| `systematic-debugging`       | A failure must be reproduced and isolated before repair          |
-| `task-completion`            | A substantial engineering task needs selective skill chaining    |
-| `task-completion-autonomous` | A delegated task must finish without clarification prompts       |
-| `test-writing`               | Behavior or regressions need durable automated coverage          |
+| Skill                        | Use it when                                                       |
+| ---------------------------- | ----------------------------------------------------------------- |
+| `architecture-diagramming`   | System relationships need a clear, editable visual                |
+| `author-documentation`       | Technical guidance needs accurate, maintainable reader structure  |
+| `authoring-skills`           | A reusable agent capability needs deliberate design               |
+| `autonomous-loop`            | Work should iterate autonomously toward a bounded outcome         |
+| `babysit-jobs`               | Existing commands, checks, or reviews need terminal monitoring    |
+| `change-review`              | Any concrete change needs evidence-backed defect analysis         |
+| `code-review`                | Code needs actionable correctness and security review             |
+| `data-model`                 | Persistent entities, invariants, and access patterns need design  |
+| `dependency-upgrade`         | A package upgrade needs compatibility and regression control      |
+| `enforce-structure`          | Repository layout rules need deterministic enforcement            |
+| `explore-codebase`           | An unfamiliar codebase must be mapped before acting               |
+| `git-worktrees`              | Concurrent branches need isolated working directories             |
+| `implementation-planning`    | A repository-grounded request needs an executable change plan     |
+| `initialize-repository`      | A repository needs a modern stack-specific foundation             |
+| `improve-architecture`       | Software boundaries or coupling need deliberate redesign          |
+| `maintain-wiki`              | Personal knowledge must be organized, linked, and validated       |
+| `migration-planning`         | A transition needs staged compatibility and recovery              |
+| `organize-codebase`          | Application folders need coherent ownership and boundaries        |
+| `performance-analysis`       | Latency, throughput, or capacity needs measurement                |
+| `production-ready`           | A workload needs an evidence-based operational readiness review   |
+| `red-green-testing`          | A behavior change benefits from proving the test fails first      |
+| `raise-pull-request`         | Completed work needs a user-authored, review-ready pull request   |
+| `reuse-code`                 | Existing code should be found before adding or duplicating it     |
+| `security-audit`             | A defined surface needs an authorized security assessment         |
+| `subagent-coordination`      | Independent workstreams can be delegated safely                   |
+| `systematic-debugging`       | A failure must be reproduced and isolated before repair           |
+| `task-completion`            | A substantial engineering task needs selective skill chaining     |
+| `task-completion-autonomous` | A delegated task must finish without clarification prompts        |
+| `test-writing`               | Behavior or regressions need durable automated coverage           |
+| `use-rtk`                    | Supported shell output should be compacted without losing control |
+| `select-agent-tooling`       | A demonstrated agent-workflow bottleneck needs a focused helper   |
 
 ### Productivity
 
@@ -255,107 +97,51 @@ make ci
 | `primary-source-research` | Current technical claims need authoritative evidence and links |
 | `to-ticket`               | A request or decision must become implementation-ready work    |
 
-The sections above help people browse the plugin; skills are stored flat so their source
-paths match the runtime discovery layout.
+## Documentation
 
-### Composition
+The [documentation index](docs/README.md) routes readers by intent:
 
-Focused skills can route to one another using `$skill-name`. The reference is a conditional
-handoff, not an unconditional import. `$task-completion` selects the developer capabilities
-justified by a task, `$autonomous-loop` manages bounded execution cycles, and
-`$subagent-coordination` governs independent delegated work. The validator prevents broken
-references while allowing intentional conditional cycles.
+- [Installation](docs/getting-started/installation.md)
+- [Development setup](docs/getting-started/development.md)
+- [Catalog architecture](docs/concepts/architecture.md)
+- [Skill composition](docs/concepts/skill-composition.md)
+- [Authoring skills](docs/authoring/skills.md)
+- [Authoring plugins](docs/authoring/plugins.md)
+- [Repository layout](docs/reference/repository-layout.md)
+- [Validation](docs/reference/validation.md)
 
-### Explicit-only modes
-
-Some skills alter interaction style or enable broad orchestration, so they are available
-only when explicitly invoked:
-
-- `$ask-me`, `$brief-mode`, and `$decision-interview` change how the conversation proceeds;
-- `$task-completion` and `$autonomous-loop` coordinate broad execution;
-- `$task-completion-autonomous` makes reasonable in-scope decisions without asking the user;
-- `$subagent-coordination` enables a delegation strategy only when requested and available.
-
-Focused capabilities such as `$git-worktrees`, `$security-audit`, and `$data-model` remain
-eligible for normal discovery when their descriptions match the request.
-
-## Repository map
+## Repository overview
 
 ```text
-plugins/
-└── core-skills/
-    ├── plugin.json
-    ├── .claude-plugin/plugin.json
-    └── skills/<skill-name>/
-scripts/
-├── ci/       deterministic repository validation
-├── dev/      local contributor utilities
-└── setup/    one-time workstation bootstrap
-src/          TypeScript catalog validator
-test/         validator behavior tests
-docs/         architecture and authoring guides
+plugins/     versioned plugin packages and their skills
+docs/        user, contributor, concept, integration, and reference guides
+scripts/     setup, development, and CI entrypoints
+src/         TypeScript catalog validator
+test/        validator behavior tests
 ```
 
-Each skill owns its `SKILL.md` and optional `agents/`, `scripts/`, `references/`, and
-`assets/`. Each directory under `plugins/` is an independent versioned installation
-boundary.
+Each plugin owns everything it installs. Each skill owns its `SKILL.md` and optional
+`agents/`, `references/`, `scripts/`, and `assets/` directories. See the
+[repository layout](docs/reference/repository-layout.md) for the complete tree.
 
-## Common commands
+## Contributing
+
+Install the pinned toolchain and Git hooks, then run the complete local checks:
 
 ```bash
-make help          # show every supported command
-make check         # fast, offline checks used while editing
-make ci            # full local CI, including external link validation
-make links         # check local and external links with Lychee
-make format        # apply Prettier formatting
-make markdown-fix  # apply safe Markdownlint fixes
-make validate      # validate catalog structure and metadata
+make setup
+make ci
 ```
 
-`make shellcheck` statically analyzes every executable shell script under `scripts/`. It
-catches unsafe quoting, broken conditionals, non-portable constructs, accidental word
-splitting, and similar shell defects without executing the scripts.
+Read [CONTRIBUTING.md](CONTRIBUTING.md), [AGENTS.md](AGENTS.md), and
+[CONTEXT.md](CONTEXT.md) before changing an asset. Common commands and Husky behavior are
+documented in [Development setup](docs/getting-started/development.md).
 
-Git hooks validate links at two levels:
+## Releases and security
 
-- Husky's pre-commit hook rejects oversized files, broken symlinks, and merge-conflict
-  markers before running the offline repository checks and Lychee with `--offline`, which
-  validates repository-local file targets
-  without requiring network access;
-- Husky's pre-push hook runs `make ci`, including the full external HTTP link check;
-- CI repeats the full check so bypassing local hooks cannot merge broken links.
-
-`pnpm check` contains only Node-managed checks. `make ci` is the complete repository check:
-it runs `pnpm check`, ShellCheck, typos, Lychee, actionlint, and yamllint. Lychee is managed
-through Mise rather than npm, so it belongs in the CI wrapper instead of the package script.
-
-Mise is used because this repository has a mixed toolchain. It gives developers and CI a
-single version declaration instead of requiring independently managed Node, Python, and
-Rust-based utilities. Markdownlint checks Markdown structure; Lychee checks whether links
-resolve. Both are necessary because neither replaces the other.
-
-Before contributing, read [CONTRIBUTING.md](CONTRIBUTING.md) and the relevant authoring
-guide:
-
-- [Authoring skills](docs/authoring-skills.md)
-- [Authoring plugins](docs/authoring-plugins.md)
-- [Catalog architecture](docs/architecture.md)
-- [Repository context](CONTEXT.md)
-
-## Releases
-
-Signed semantic-version tags publish a validated Agent Plugin archive through GitHub
-Releases:
-
-```bash
-git tag -s v0.1.0 -m "MZeolla AI Toolkit v0.1.0"
-git push origin v0.1.0
-```
-
-Generated archives live under `dist/` and are never committed. User-visible changes are
-tracked in [CHANGELOG.md](CHANGELOG.md).
-
-## Security
+Signed semantic-version tags publish validated Agent Plugin archives. Generated archives
+live under `dist/` and are not committed. User-visible changes are tracked in
+[CHANGELOG.md](CHANGELOG.md).
 
 Never place credentials, private keys, customer data, or environment-specific secrets in
 skills or examples. Use the private reporting process in [SECURITY.md](SECURITY.md) for a

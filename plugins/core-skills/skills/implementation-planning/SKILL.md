@@ -18,6 +18,9 @@ facts found in the repository from assumptions and unresolved decisions.
 Use `$reuse-code` to identify existing components, utilities, contracts, and dependencies
 that the implementation can extend instead of planning parallel replacements. Use
 `$organize-codebase` when folder ownership or target placement is itself part of the plan.
+Use `$select-agent-tooling` only when the plan must resolve a demonstrated implementation
+bottleneck involving context size, structural search, semantic navigation, or current
+documentation; ordinary development tools do not require a separate selection workstream.
 
 Describe the intended end state in observable terms. Include important invariants such
 as compatibility, data ownership, authorization boundaries, rollback needs, and which

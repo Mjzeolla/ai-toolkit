@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use RTK"
+  short_description: "Compress noisy agent command output safely"
+  default_prompt: "Use $use-rtk to run supported development commands with compact, useful output."

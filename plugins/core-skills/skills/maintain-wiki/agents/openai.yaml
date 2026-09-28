@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Wiki"
+  short_description: "Write and organize durable personal wiki content"
+  default_prompt: "Use $maintain-wiki to add or improve this knowledge in my wiki."

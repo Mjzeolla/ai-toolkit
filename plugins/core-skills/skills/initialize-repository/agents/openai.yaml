@@ -1,0 +1,4 @@
+interface:
+  display_name: "Initialize Repository"
+  short_description: "Create a modern repository foundation"
+  default_prompt: "Use $initialize-repository to create a production-ready baseline for this repository."

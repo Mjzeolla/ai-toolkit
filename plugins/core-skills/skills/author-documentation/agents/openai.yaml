@@ -1,0 +1,4 @@
+interface:
+  display_name: "Documentation Authoring"
+  short_description: "Create structured, maintainable technical documentation"
+  default_prompt: "Use $author-documentation to create or improve this technical documentation."

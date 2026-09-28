@@ -21,6 +21,9 @@ pretending an inactive process is still being watched.
 Poll with bounded waits and reasonable backoff when no event-driven mechanism exists. Keep
 a compact state snapshot and report only meaningful transitions, actionable failures, or
 requested periodic updates. Do not busy-loop or repeatedly announce unchanged state.
+Use `$use-rtk` only when RTK is already available and compacting a supported command does not
+discard the status, failure evidence, or terminal state being monitored. Preserve raw logs or
+stable artifact links when they are the authoritative record.
 
 On failure, capture the failing step, relevant output, and stable link or identifier. Diagnose
 or repair only when the original request authorizes it; otherwise report the failure and the

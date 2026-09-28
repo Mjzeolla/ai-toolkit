@@ -15,6 +15,12 @@ and validation commands. Record uncertainty and resolve only what affects the re
 decision. Avoid reading the entire repository or producing a generic inventory with no
 connection to the task.
 
+If native search, repository indexes, and language tooling cannot efficiently answer the
+focused question, use `$select-agent-tooling` to evaluate the smallest helper for the
+demonstrated gap. When RTK is already available, use `$use-rtk` for supported discovery
+commands whose raw output is mostly noise; rerun raw commands when ordering, complete matches,
+or omitted details affect the conclusion.
+
 When exploration uncovers architecture debt, do not silently expand into refactoring; use
 `$improve-architecture` only when improvement is requested. Hand focused findings to
 `$implementation-planning` for a change plan or `$systematic-debugging` for a concrete

@@ -20,6 +20,10 @@ the tightest useful file or line range. Do not report style preferences, specula
 or pre-existing problems as defects in the change. Avoid duplicating the same root cause
 across several comments.
 
+When RTK is already available, `$use-rtk` may compact routine test, lint, and build output.
+Read the actual diff and evidence-bearing failure output without lossy filtering; rerun raw
+commands whenever the compact view cannot support a finding.
+
 If no actionable defect is supported by evidence, say so and identify any testing limits.
 This skill reviews code; use `$change-review` when the artifact includes broader
 documentation, infrastructure, or operational changes.

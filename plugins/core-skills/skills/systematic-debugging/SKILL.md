@@ -30,6 +30,12 @@ Prefer primary evidence such as failing tests, structured logs, effective config
 network traces, process state, and versioned source. Treat timing correlation and familiar
 symptoms as leads, not conclusions.
 
+Use `$use-rtk` only for routine supported commands when RTK is already available. Debugging
+usually requires exact failure evidence, so rerun the underlying raw command as soon as a
+filtered result omits ordering, warnings, repeated events, or other hypothesis-relevant detail.
+If the investigation exposes a recurring tooling gap rather than a product defect, use
+`$select-agent-tooling` to evaluate a focused helper without expanding the repair scope.
+
 ## Repair and prove
 
 When authorized to fix the issue:

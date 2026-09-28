@@ -1,0 +1,4 @@
+interface:
+  display_name: "Select Agent Tooling"
+  short_description: "Choose focused helpers for coding agents"
+  default_prompt: "Use $select-agent-tooling to recommend the smallest useful AI development toolset for this workflow."

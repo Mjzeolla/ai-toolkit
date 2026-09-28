@@ -21,7 +21,13 @@ Use `$explore-codebase` when ownership or execution flow is unclear. Route schem
 `$data-model`, behavioral changes to `$test-writing` or `$red-green-testing`, security
 boundaries to `$security-audit`, and deployment-sensitive completion to
 `$production-ready`. Use `$subagent-coordination` only when independent parallel work has
-a clear merge boundary and delegation is available.
+a clear merge boundary and delegation is available. Use `$git-worktrees` when autonomous work
+needs branch isolation from a dirty checkout, concurrent task, or risky validation environment;
+validate the integrated result before completion.
+
+If the explicitly delegated terminal condition is a pull request, use `$raise-pull-request` after the
+change and validation are complete. Do not infer permission to commit, push, publish, merge, or deploy
+from a request for autonomous implementation alone.
 
 Use `$babysit-jobs` rather than busy polling when progress depends on an existing command,
 CI run, review, or delegated task reaching a terminal state.

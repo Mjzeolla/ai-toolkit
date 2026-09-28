@@ -1,0 +1,4 @@
+interface:
+  display_name: "Raise Pull Request"
+  short_description: "Prepare and publish a review-ready pull request"
+  default_prompt: "Use $raise-pull-request to prepare and raise a pull request for these completed changes."
